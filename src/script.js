@@ -14,12 +14,47 @@ const canvas = document.querySelector("canvas.webgl");
 
 // Scene
 const scene = new THREE.Scene();
+// Textures
+const textureLoader = new THREE.TextureLoader();
 
-/**
- * House
- */
+const floorAlphaTexture = textureLoader.load("./floor/alpha.webp");
+const floorColorTexture = textureLoader.load("./floor/coast_sand_rocks_02_1k/coast_sand_rocks_02_diff_1k.jpg");
+const floorARMTexture = textureLoader.load("./floor/coast_sand_rocks_02_1k/coast_sand_rocks_02_arm_1k.jpg");
+const floorNormalTexture = textureLoader.load("./floor/coast_sand_rocks_02_1k/coast_sand_rocks_02_nor_gl_1k.jpg");
+const floorDisplacementTexture = textureLoader.load("./floor/coast_sand_rocks_02_1k/coast_sand_rocks_02_disp_1k.jpg");
 
-const floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial());
+floorColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+floorColorTexture.repeat.set(8, 8);
+floorARMTexture.repeat.set(8, 8);
+floorNormalTexture.repeat.set(8, 8);
+floorDisplacementTexture.repeat.set(8, 8);
+
+floorColorTexture.wrapS = THREE.RepeatWrapping;
+floorARMTexture.wrapS = THREE.RepeatWrapping;
+floorNormalTexture.wrapS = THREE.RepeatWrapping;
+floorDisplacementTexture.wrapS = THREE.RepeatWrapping;
+
+floorColorTexture.wrapT = THREE.RepeatWrapping;
+floorARMTexture.wrapT = THREE.RepeatWrapping;
+floorNormalTexture.wrapT = THREE.RepeatWrapping;
+floorDisplacementTexture.wrapT = THREE.RepeatWrapping;
+
+// House
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(20, 20),
+  new THREE.MeshStandardMaterial({
+    map: floorColorTexture,
+    alphaMap: floorAlphaTexture,
+    aoMap: floorARMTexture,
+    roughnessMap: floorARMTexture,
+    metalnessMap: floorARMTexture,
+    normalMap: floorNormalTexture,
+    displacementMap: floorDisplacementTexture,
+    transparent: true,
+  })
+);
+
 floor.rotation.x = Math.PI * -0.5;
 scene.add(floor);
 
@@ -62,6 +97,7 @@ house.add(bush2);
 const bush3 = new THREE.Mesh(bushGeometry, bushMaterial);
 bush3.scale.set(0.4, 0.4, 0.4);
 bush3.position.set(-0.8, 0.1, 2.2);
+``;
 house.add(bush3);
 
 const bush4 = new THREE.Mesh(bushGeometry, bushMaterial);
